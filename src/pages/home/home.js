@@ -18,14 +18,6 @@ const Home = () => {
   const [ region, setRegion ] = useState("")
   const [ page, setPage ] = useState(1)
 
-  useEffect(()=>{
-    if(region){
-      dispatch(countrySearch(search,region,page))
-      return
-    }
-    dispatch(countryAll(page))
-  },[ dispatch, page ])
-
   const handleChangeSearch = (e) => {
     e.preventDefault()
     setSearch(e.target.value)
@@ -58,6 +50,16 @@ const Home = () => {
     "Europe",
     "Oceania"
   ]
+
+    useEffect(()=>{
+      if(region){
+        dispatch(countrySearch(search,region,page))
+        return
+      }
+      dispatch(countryAll(page))
+      //eslint-disable-next-line
+    },[ dispatch, page ])
+
 
   return (
     <Box sx={{minHeight:"calc(100vh)", bgcolor:"background.default"}}>
