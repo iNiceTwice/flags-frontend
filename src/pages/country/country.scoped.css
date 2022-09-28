@@ -1,0 +1,55 @@
+.center{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.grid-item {
+    display: flex;
+    flex-direction: column;
+}
+.flag-image{
+    height: 330px;
+}
+.buttonContainer {
+    display: flex;
+    flex-wrap: wrap;
+}
+.countryInfo {
+    display: flex;
+    flex-direction: column;
+    gap:1;
+}
+.bordersContainer {
+    padding-left: 2rem;
+    padding-right: 2rem;
+    flex-direction: column;
+    display: flex;
+    justify-content: center;
+    justify-items: center;
+}
+
+@media(max-width: 768px) {
+    .flag-image{
+        height: 250px;
+    }
+    .buttonContainer{
+        max-width: 20rem;
+    }
+
+}
+
+@media(max-width: 576px) {
+    .flag-image {
+        height: 200px;
+    }
+    .buttonContainer {
+        max-width: 15rem;
+    }
+}
+
+@media(max-width: 375px) {
+    .flag-image {
+        height: 130px;
+    }
+}

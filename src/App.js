@@ -1,24 +1,60 @@
-import logo from './logo.svg';
 import './App.css';
+import { BrowserRouter, Routes, Route } from "react-router-dom"
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { useSelector } from "react-redux"
+import Home from "./pages/home/home"
+import Error404 from "./pages/error404/error404"
+import Country from './pages/country/country';
 
-function App() {
+const darkTheme = createTheme({
+ typography: {
+    fontFamily: 'Nunito Sans'
+  },
+  palette: {
+    mode: 'dark',
+    primary:{
+      main:"hsl(209, 23%, 19%)",
+      constrastText:"#fff"
+    },
+    background:{
+      default:"hsl(207, 26%, 17%)",
+      paper:"hsl(209, 23%, 19%)"
+    }
+  }
+});
+const lightTheme = createTheme({
+   typography: {
+    fontFamily: 'Nunito Sans',
+  },
+  palette:{
+    mode:"light",
+    primary:{
+      main:"hsl(0, 0%, 100%)"
+    },
+    background:{
+      default:"hsl(0, 0%, 95%)",
+      paper:"hsl(0, 0%, 100%)"
+    }
+  }
+})
+
+
+
+const App = () => {
+
+  const darkMode = useSelector(state => state.theme.nightMode)
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
+      <BrowserRouter>
+        <Routes>
+          <Route path="*" element={<Error404/>} />
+          <Route path="/" element={<Home/>} />
+          <Route path="/:country" element={<Country/>} />
+        </Routes>
+      </BrowserRouter>  
+    </ThemeProvider>
+  
   );
 }
 
