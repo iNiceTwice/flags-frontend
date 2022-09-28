@@ -52,7 +52,7 @@ const Country = () => {
             return
         } 
         dispatch(countrySearch(params.country))
-    },[params.country,dispatch,isError])   
+    },[params.country,dispatch,isError,navigate])   
 
     return (
         <>
