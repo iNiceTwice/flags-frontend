@@ -1,11 +1,11 @@
 import { Card, CardActionArea, CardMedia, CardContent, Typography } from "@mui/material"
 import { Link } from "react-router-dom"
 
-const Item = ({ name,population,region,capital,image }) => {
+const Item = ({ name, population, region, capital, image }) => {
     return ( 
         <>
             <Link to={`/${name}`}>
-                <Card sx={{ gap:1, mb:4 }}>
+                <Card sx={{scale:{xs:"0.8", sm:"0.8", md:"1"}, gap:1, mb:4 }}>
                     <CardActionArea>
                         <CardMedia
                             sx={{height:"200px", width:"320px"}}
