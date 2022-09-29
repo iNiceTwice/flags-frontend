@@ -33,10 +33,12 @@ export const countrySearch = (country,region,page) => {
                     const data = response.data.slice((page*8)-8,page*8)
                     dispatch(countryLength(response.data.length))
                     dispatch(countryData(data))    
+                    dispatch(countryLoading(false)) 
+                }else{
+                    const response = await axios.get(`https://restcountries.com/v3.1/name/${country}?fullText=true`)
+                    dispatch(countryData(response.data))
+                    dispatch(countryLoading(false)) 
                 }
-                const response = await axios.get(`https://restcountries.com/v3.1/name/${country}?fullText=true`)
-                dispatch(countryData(response.data))
-                dispatch(countryLoading(false)) 
             }else if( region && !country){
                 const response = await axios.get(`https://restcountries.com/v3.1/region/${region}`)
                 const data = response.data.slice((page*8)-8,page*8)

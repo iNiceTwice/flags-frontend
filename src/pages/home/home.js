@@ -1,48 +1,16 @@
-import "./home.scoped.css"
+import { Box, Grid, InputBase, Select, MenuItem, FormControl, InputLabel, Pagination, Stack, Typography } from '@mui/material'
+import { countryAll, countrySearch } from '../../redux/actions/countryActions';
+import CountryItem from '../../components/CountryItem/CountryItem'
+import { useDispatch, useSelector } from 'react-redux';
+import SearchIcon from '@mui/icons-material/Search';
+import NavBar from '../../components/NavBar/NavBar'
 import React, { useState, useEffect } from 'react';
 import ContentLoader from "react-content-loader"
-import { Box, Grid, InputBase, Select, MenuItem, FormControl, InputLabel, Pagination, Stack } from '@mui/material'
-import { useDispatch, useSelector } from 'react-redux';
-import { countryAll, countrySearch } from '../../redux/actions/countryActions';
-import SearchIcon from '@mui/icons-material/Search';
-import CountryItem from '../../components/CountryItem/CountryItem'
-import NavBar from '../../components/NavBar/NavBar'
+import debounce from "lodash.debounce"
+import "./home.scoped.css"
 
 const Home = () => {
-
-  const dispatch = useDispatch()
-  const countries = useSelector(state => state.countries.countries)
-  const loading = useSelector(state => state.countries.loading)
-  const countriesTotal = useSelector(state => state.countries.countriesTotal)
-  const [ search, setSearch ] = useState("")
-  const [ region, setRegion ] = useState("")
-  const [ page, setPage ] = useState(1)
-
-  const handleChangeSearch = (e) => {
-    e.preventDefault()
-    setSearch(e.target.value)
-
-    if(e.target.value.length > 2){
-      dispatch(countrySearch(e.target.value,region,page))
-    }
-    
-    if(!region && !search){
-      dispatch(countryAll(page))
-      return
-    }
-    
-    dispatch(countrySearch(search,region,page))
-    
-  }
-  const handleChangeSelect = (e) => {
-    e.preventDefault()
-    setRegion(e.target.value)
-    setPage(1)
-    dispatch(countrySearch(search,e.target.value,page))
-  }
-  const handleChangePage = (e, value) => {
-    setPage(value)
-  }
+  
   const regions = [
     "Africa",
     "Americas",
@@ -51,15 +19,31 @@ const Home = () => {
     "Oceania"
   ]
 
-    useEffect(()=>{
-      if(region){
-        dispatch(countrySearch(search,region,page))
-        return
-      }
-      dispatch(countryAll(page))
-      //eslint-disable-next-line
-    },[ dispatch, page ])
+  const dispatch = useDispatch()
+  const countries = useSelector(state => state.countries.countries)
+  const loading = useSelector(state => state.countries.loading)
+  const isError = useSelector(state => state.countries.isError)
+  const countriesTotal = useSelector(state => state.countries.countriesTotal)
+  const [ search, setSearch ] = useState("")
+  const [ region, setRegion ] = useState("")
+  const [ page, setPage ] = useState(1)
 
+  const handleChangeSearch = debounce((e) => {
+    setSearch(e.target.value.toLowerCase().trim())
+  },300)
+
+  const handleChangeSelect = (e) => {
+    setRegion(e.target.value)
+    setPage(1)
+  }
+ 
+  useEffect(()=>{
+    if(!search && !region){
+      dispatch(countryAll(page))
+    }else{
+      dispatch(countrySearch(search,region,page))
+    }
+  },[ dispatch, page, search, region ])
 
   return (
     <Box sx={{minHeight:"calc(100vh)", bgcolor:"background.default"}}>
@@ -70,7 +54,7 @@ const Home = () => {
             <FormControl>
               <InputBase
                 onChange={handleChangeSearch}
-                value={search}
+                
                 className="searchInput"
                 sx={{bgcolor:"background.paper" }} 
                 placeholder="Search for a country..."
@@ -118,7 +102,8 @@ const Home = () => {
                   <rect x="12" y="306" rx="2" ry="2" width="300" height="11" />
                 </ContentLoader>
               </Grid>
-            )) :
+            )) : 
+            !isError ?
             countries.map((country)=>(
               <Grid className="gridItem" key={country.name.common} item xs={12} sm={12} md={6} lg={4} xl={3}>
                 <CountryItem
@@ -130,12 +115,21 @@ const Home = () => {
                   image={country.flags.png}  
                 />
               </Grid>
-            ))
-          }
+            )) : <Typography sx={{mt:"4rem"}} color="textPrimary" variant="h4">No countries found</Typography>
+          } 
         </Grid>
-        <Stack sx={{p:"2rem", width:"100%"}}>
-          <Pagination  page={page} onChange={handleChangePage} size="small" sx={{margin:"auto"}} count={Math.ceil(countriesTotal/8)}/>
-        </Stack>
+        {
+          !isError && 
+          <Stack sx={{p:"2rem", width:"100%"}}>
+            <Pagination 
+              page={page} 
+              size="small" 
+              sx={{margin:"auto"}} 
+              count={Math.ceil(countriesTotal/8)}
+              onChange={(e,value) => setPage(value)} 
+            />
+          </Stack>
+        }
       </div>
     </Box>
   )

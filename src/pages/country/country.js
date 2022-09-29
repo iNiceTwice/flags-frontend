@@ -47,11 +47,11 @@ const Country = () => {
         return c[0]
     })
     useEffect(() => {
-        if(isError){
+        dispatch(countrySearch(params.country))
+        if(isError === true){
             navigate("/error/404") 
             return
-        } 
-        dispatch(countrySearch(params.country))
+        }
     },[params.country,dispatch,isError,navigate])   
 
     return (
