@@ -77,13 +77,13 @@ frontera, estos mismos redirigen a su propia página con sus detalles.
 Clone the project
 
 ```bash
-  git clone https://link-to-project
+  git clone https://github.com/iNiceTwice/flags-frontend.git
 ```
 
 Go to the project directory
 
 ```bash
-  cd my-project
+  cd countries
 ```
 
 Install dependencies
