@@ -54,7 +54,6 @@ const Home = () => {
             <FormControl>
               <InputBase
                 onChange={handleChangeSearch}
-                
                 className="searchInput"
                 sx={{bgcolor:"background.paper" }} 
                 placeholder="Search for a country..."
